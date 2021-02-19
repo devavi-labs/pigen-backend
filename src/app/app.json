@@ -1,0 +1,8 @@
+{
+  "name": "Pigen",
+  "description": "An end-to-end encrypted text-only chat web application.",
+  "version": "0.1.0",
+  "version_details": "The first release",
+  "author": "Dev. Avi (Avinash Sinha)",
+  "developers": ["Dev. Avi (Avinash Sinha)"]
+}
