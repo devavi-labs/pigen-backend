@@ -1,13 +1,14 @@
 import { Resolver, Query } from "@nestjs/graphql"
 import { AppService } from "./app.service"
-import { App } from "./models/app.model"
+import { App } from "./entities/app.entity"
 
 @Resolver(() => App)
 export class AppResolver {
   constructor(private readonly appService: AppService) {}
 
   @Query(() => App)
-  appDetails(): App {
-    return this.appService.getAppDetails()
+  async latesVersionDetails(): Promise<App> {
+    const versions = await this.appService.findAll()
+    return versions[versions.length - 1]
   }
 }
