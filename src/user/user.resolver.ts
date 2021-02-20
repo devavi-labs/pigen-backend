@@ -224,6 +224,60 @@ export class UserResolver {
     }
   }
 
+  @Mutation(() => UserResponse)
+  @UseGuards(AuthGuard)
+  async changeUsername(
+    @Args("username") username: string,
+    @Context() { user }: GqlContextType,
+  ) {
+    this.logger.log(this.changeUsername.name, `${UserResolver.name} - Mutation`)
+
+    const validator = new UserInputValidator({ username })
+
+    this.logger.log(`Validating inputs for user ${user.name}`)
+
+    const errors = validator.validate()
+
+    if (errors) {
+      this.logger.error(`Found errors in inputs for user ${user.name}`)
+      return { errors }
+    }
+
+    try {
+      this.logger.log(`Username updating for user ${user.name}`)
+
+      await this.userService.update(user._id, {
+        usernameLowerCase: username.toLowerCase(),
+        username,
+      })
+
+      this.jwtService.setUser(user)
+
+      this.logger.log(`Generating access tokens for user ${user.name}`)
+
+      const accessToken = this.jwtService.createAccessToken()
+      const refreshToken = this.jwtService.createRefreshToken()
+
+      return { user, accessToken, refreshToken }
+    } catch (error) {
+      this.logger.error(`Username couldn't be updated for user ${user.name}`)
+
+      if (
+        error.message.includes("usernameLowerCase") ||
+        error.message.includes("username")
+      ) {
+        return {
+          errors: [
+            {
+              field: "username",
+              message: "Username already taken",
+            },
+          ],
+        }
+      }
+    }
+  }
+
   @Query(() => User, { nullable: true })
   async userByUsername(@Args("username") username: string) {
     return this.userService.findByUsername(username)
