@@ -76,7 +76,7 @@ export class UserResolver {
             },
           ],
         }
-      } else  if (
+      } else if (
         error.message.includes("usernameLowerCase") ||
         error.message.includes("username")
       ) {
@@ -253,6 +253,8 @@ export class UserResolver {
         usernameLowerCase: username.toLowerCase(),
         username,
       })
+
+      user.username = username
 
       this.jwtService.setUser(user)
 
