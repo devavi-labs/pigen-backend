@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { InjectModel } from "@nestjs/mongoose"
 import { Model } from "mongoose"
-import { RegexpProvider } from "src/regexp/regexp.provider"
 import { UserDto } from "./dto/user.dto"
 import { User, UserDocument } from "./entities/user.entity"
 
@@ -9,7 +8,6 @@ import { User, UserDocument } from "./entities/user.entity"
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    private readonly regexpProvider: RegexpProvider,
   ) {}
 
   async save(userDto: UserDto): Promise<User> {
