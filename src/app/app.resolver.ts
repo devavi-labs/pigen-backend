@@ -9,9 +9,9 @@ export class AppResolver {
   private readonly logger = new Logger(AppResolver.name)
 
   @Query(() => App)
-  latesVersionDetails(): Promise<App> {
+  latestVersionDetails(): Promise<App> {
     this.logger.log(
-      this.latesVersionDetails.name,
+      this.latestVersionDetails.name,
       `${AppResolver.name} - Query`,
     )
 
