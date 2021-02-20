@@ -7,7 +7,7 @@ export class GqlConfigService implements GqlOptionsFactory {
   createGqlOptions(): GqlModuleOptions {
     return {
       autoSchemaFile: true,
-      context: new GqlContext(),
+      context: ({ req, res }) => new GqlContext({ req, res }),
     }
   }
 }

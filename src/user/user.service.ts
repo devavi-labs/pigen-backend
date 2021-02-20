@@ -17,6 +17,10 @@ export class UserService {
     return await newUser.save()
   }
 
+  findById(id: string): Promise<User> {
+    return this.userModel.findById(id).exec()
+  }
+
   findByUsername(username: string): Promise<User> {
     return this.userModel
       .findOne({ usernameLowerCase: username.toLowerCase() })
