@@ -10,17 +10,17 @@ export class AppService {
     @InjectModel(App.name) private readonly appModel: Model<AppDocument>,
   ) {}
 
-  async save(appDto: AppDto): Promise<App> {
-    const newApp = new this.appModel({ ...appDto, releasedAt: Date.now() })
+  async saveVersionDetails(appDto: AppDto): Promise<App> {
+    const newApp = new this.appModel(appDto)
     return newApp.save()
   }
 
   async getlatestVersionDetails(): Promise<App> {
-    const versions = await this.findAll()
+    const versions = await this.appModel.find().exec()
     return versions[versions.length - 1]
   }
 
-  async findAll(): Promise<App[]> {
+  async getAllVersionDetails(): Promise<App[]> {
     return this.appModel.find().exec()
   }
 }

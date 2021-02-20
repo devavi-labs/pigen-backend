@@ -1,8 +1,14 @@
 {
   "name": "pigen-backend",
+  "app_name": "pigen",
   "version": "0.0.1",
-  "description": "An end-to-end encrypted text-only chat web application.",
-  "author": "Dev. Avi",
+  "version_description": "Initial Release",
+  "description": "An end-to-end encrypted text-only chat mobile application.",
+  "author": {
+    "name": "Dev. Avi (Avinash Sinha)",
+    "email": "devavilabs@gmail.com",
+    "url": "https://www.devavi.xyz"
+  },
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -44,22 +50,5 @@
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.5"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }

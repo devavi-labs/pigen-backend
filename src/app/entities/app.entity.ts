@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql"
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
 import { Document } from "mongoose"
+import { Author } from "src/author/entities/author.entity"
 
 export type AppDocument = App & Document
 
@@ -8,7 +9,7 @@ export type AppDocument = App & Document
 @ObjectType()
 export class App {
   @Field()
-  _id: string
+  _id?: string
 
   @Prop({ required: true })
   @Field()
@@ -30,13 +31,13 @@ export class App {
   @Field()
   releasedAt: Date
 
-  @Prop({ required: true })
-  @Field()
-  author: string
+  @Prop({ required: true, type: Author })
+  @Field(() => Author)
+  author: Author
 
   @Prop({ required: true })
-  @Field(() => [String])
-  developers: Array<string>
+  @Field(() => String)
+  license: string
 }
 
 export const AppSchema = SchemaFactory.createForClass(App)
