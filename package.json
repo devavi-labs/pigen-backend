@@ -1,7 +1,7 @@
 {
   "name": "pigen-backend",
   "app_name": "pigen",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "version_description": "Initial Release",
   "description": "An end-to-end encrypted text-only chat mobile application.",
   "author": {
