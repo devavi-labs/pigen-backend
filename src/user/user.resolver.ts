@@ -76,7 +76,10 @@ export class UserResolver {
             },
           ],
         }
-      } else if (error.message.includes("usernameLowerCase")) {
+      } else  if (
+        error.message.includes("usernameLowerCase") ||
+        error.message.includes("username")
+      ) {
         return {
           errors: [
             {
