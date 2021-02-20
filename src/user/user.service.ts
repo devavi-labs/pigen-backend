@@ -17,6 +17,10 @@ export class UserService {
     return await newUser.save()
   }
 
+  async update(userId: string, userDto: Partial<UserDto>): Promise<User> {
+    return await this.userModel.updateOne({ _id: userId }, userDto)
+  }
+
   findById(id: string): Promise<User> {
     return this.userModel.findById(id).exec()
   }

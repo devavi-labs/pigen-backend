@@ -1,6 +1,8 @@
-import { Logger } from "@nestjs/common"
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql"
+import { Logger, UseGuards } from "@nestjs/common"
+import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { hash, verify } from "argon2"
+import { GqlContextType } from "src/gql/gql.context"
+import { AuthGuard } from "src/guards/auth.guard"
 import { JwtService } from "src/jwt/jwt.service"
 import { RegexpProvider } from "src/regexp/regexp.provider"
 import { UserDto } from "./dto/user.dto"
@@ -158,6 +160,63 @@ export class UserResolver {
         errors: [
           {
             field: "password",
+            message: "The password is incorrect.",
+          },
+        ],
+      }
+    }
+  }
+
+  @Mutation(() => UserResponse)
+  @UseGuards(AuthGuard)
+  async changePassword(
+    @Args("oldPassword") oldPassword: string,
+    @Args("password") password: string,
+    @Context() { user }: GqlContextType,
+  ) {
+    const validator = new UserInputValidator({ oldPassword, password })
+
+    this.logger.log(`Validating inputs for user ${user.name}`)
+
+    const errors = validator.validate()
+
+    if (errors) {
+      this.logger.error(`Found errors in inputs for user ${user.name}`)
+      return { errors }
+    }
+
+    this.logger.log(`Verifying password for user ${user.name}`)
+
+    if (await verify(user.password, oldPassword)) {
+      this.logger.log(`Password verified for user ${user.name}`)
+
+      const hashedPassword = await hash(password)
+
+      try {
+        this.logger.log(`Password updating for user ${user.name}`)
+
+        await this.userService.update(user._id, {
+          password: hashedPassword,
+        })
+
+        this.jwtService.setUser(user)
+
+        this.logger.log(`Generating access tokens for user ${user.name}`)
+
+        const accessToken = this.jwtService.createAccessToken()
+        const refreshToken = this.jwtService.createRefreshToken()
+
+        return { user, accessToken, refreshToken }
+      } catch (err) {
+        this.logger.error(`Password couldn't be updated for user ${user.name}`)
+      }
+    } else {
+      this.logger.error(`Password couldn't be verified for user ${user.name}`)
+
+      return {
+        errors: [
+          {
+            field: "oldPassword",
             message: "The password is incorrect.",
           },
         ],
