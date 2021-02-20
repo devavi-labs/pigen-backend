@@ -15,6 +15,11 @@ export class AppService {
     return newApp.save()
   }
 
+  async getlatestVersionDetails(): Promise<App> {
+    const versions = await this.findAll()
+    return versions[versions.length - 1]
+  }
+
   async findAll(): Promise<App[]> {
     return this.appModel.find().exec()
   }

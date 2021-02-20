@@ -7,8 +7,7 @@ export class AppResolver {
   constructor(private readonly appService: AppService) {}
 
   @Query(() => App)
-  async latesVersionDetails(): Promise<App> {
-    const versions = await this.appService.findAll()
-    return versions[versions.length - 1]
+  latesVersionDetails(): Promise<App> {
+    return this.appService.getlatestVersionDetails()
   }
 }
