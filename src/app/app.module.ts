@@ -5,6 +5,7 @@ import { MongooseModule } from "@nestjs/mongoose"
 import { AuthorModule } from "src/author/author.module"
 import appConfig from "src/config/app.config"
 import jwtConfig from "src/config/jwt.config"
+import { GqlConfigService } from "src/gql/gqlConfig.service"
 import { JwtModule } from "src/jwt/jwt.module"
 import { RegexpModule } from "src/regexp/regexp.module"
 import { UserModule } from "src/user/user.module"
@@ -19,8 +20,8 @@ import { App, AppSchema } from "./entities/app.entity"
     MongooseModule.forRoot("mongodb://localhost:27017", {
       useCreateIndex: true,
     }),
-    GraphQLModule.forRoot({
-      autoSchemaFile: true,
+    GraphQLModule.forRootAsync({
+      useClass: GqlConfigService,
     }),
     MongooseModule.forFeature([{ name: App.name, schema: AppSchema }]),
     AuthorModule,
